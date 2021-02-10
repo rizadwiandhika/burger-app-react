@@ -1,0 +1,25 @@
+.Burger {
+    width: 100%;
+    margin: auto;
+    height: 250px;
+    overflow: scroll;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+
+/* Breakpoints */
+
+@media (min-width: 500px) {
+    .Burger {
+        width: 350px;
+        height: 300px;
+    }
+}
+@media (min-width: 1000px) {
+    .Burger {
+        width: 700px;
+        height: 600px;
+    }
+}
