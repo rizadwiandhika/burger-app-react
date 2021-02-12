@@ -3,6 +3,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Burger from '../../components/Burger/Burger';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axiosOrder from '../../axios-order';
 
 // Semua kapital itu untuk global variabel konstan
 const INGREDIENT_PRICES = {
@@ -48,7 +49,31 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        alert( 'Your order is being processed :)' )
+        // Untuk firebase, nama node lalu .json
+        const order = {
+            ingredients : this.state.ingredients,
+            price : this.state.totalPrice,
+            /** In production We should definitely calculate price on the server
+             * because we probably have our product stored in server 
+             * AND MAKE SURE USER ISN'T MANIPULATING THE CODE
+            */
+            customer : {
+                name : 'Riza Dwi Andhika',
+                address : {
+                    street : 'Jalan Ahmad Dahlan',
+                    zipCode : 50113,
+                    country : 'Indoneisa'
+                },
+                email : 'rizadwi@gmail.com'
+            },
+            deliveryMethod : 'fastest'
+        }
+        axiosOrder
+            .post( '/orders.json', order )
+            .then( response => console.log( response ) )
+            .catch( error => console.log( error ) )
+            
+        this.setState({ purchasing : false })
     }
 
     addIngredientHandler = (type) => {
