@@ -4,10 +4,6 @@ import classes from './Burger.module.css'
 
 const burger = ( props ) => {
 
-    UseEffect(() => {
-        alert( 'lifecycle update' )
-    });
-
     let transformedIngredients = (
         Object.keys( props.ingredients ).map( igKey => {
             return (
