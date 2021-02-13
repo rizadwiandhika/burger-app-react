@@ -6,9 +6,9 @@ import classes from './Modal.module.css'
 
 const modal = ( props ) => {
 
-    UseEffect(() => {
-        console.log( '[Modal.js] Updated' )
-    })
+    // UseEffect(() => {
+    //     console.log( '[Modal.js] Updated' )
+    // })
  
     return (
         <>
@@ -33,5 +33,12 @@ const modal = ( props ) => {
 */
 export default React.memo( modal, (oldProps, newProps) => {
     // Bedanya jika return "true" maka UPDATE CANCELED
-    return oldProps.show === newProps.show
+
+    const update = false
+
+    if ( oldProps.show === newProps.show && oldProps.loading === newProps.loading ) {
+        return ! update
+    }
+
+    return update
 } )
