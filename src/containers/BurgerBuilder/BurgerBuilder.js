@@ -6,6 +6,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axiosOrder from '../../axios-order'
 import withErrorHandling from '../../hoc/withErrorHandling/withErrorHandling';
+import qs from 'query-string';
 
 // Semua kapital itu untuk global variabel konstan
 const INGREDIENT_PRICES = {
@@ -20,7 +21,7 @@ class BurgerBuilder extends Component {
     state = {
         ingredients : null,
         totalPrice : 4,
-        purchaseable : false,
+        purchaseable : true,
         purchasing : false,
         loading : false,
         error : false
@@ -30,12 +31,14 @@ class BurgerBuilder extends Component {
         axiosOrder
             .get( '/ingredients.json' )
             .then( response => {
+                console.log('Then')
                 this.setState({
                     ingredients : response.data,
                     purchaseable : true
                 })
             } )
             .catch( error => {
+                console.log('Catch')
                 this.setState({ error : true })
             } )
     }
@@ -62,43 +65,20 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({ loading : true })
-        // Untuk firebase, nama node lalu .json
+        /** In production We should definitely calculate price on the server
+         * because we probably have our product stored in server 
+         * AND MAKE SURE USER ISN'T MANIPULATING THE CODE
+        */
         const order = {
-            ingredients : this.state.ingredients,
-            price : this.state.totalPrice,
-            /** In production We should definitely calculate price on the server
-             * because we probably have our product stored in server 
-             * AND MAKE SURE USER ISN'T MANIPULATING THE CODE
-            */
-            customer : {
-                name : 'Riza Dwi Andhika',
-                address : {
-                    street : 'Jalan Ahmad Dahlan',
-                    zipCode : 50113,
-                    country : 'Indoneisa'
-                },
-                email : 'rizadwi@gmail.com'
-            },
-            deliveryMethod : 'fastest'
+            ...this.state.ingredients,
+            price : this.state.totalPrice
         }
-        axiosOrder
-        .post( '/orders.json', order )
-        .then( response => {
-            alert( 'Sit and wait !! your order is being proccessed :)' )
-            this.setState({ 
-                loading : false,
-                purchasing : false
-            })
+
+        this.props.history.push({
+            pathname : '/checkout',
+            search : qs.stringify( order ),
+            state : order
         })
-        .catch( error => {
-            // alert( 'Sorry, your order cannot be proccessed..' )
-            console.log( 'Dari catch: ' + error )
-            this.setState({ 
-                loading : false,
-                purchasing : false
-            })
-        } )
     }
 
     addIngredientHandler = (type) => {
@@ -145,6 +125,7 @@ class BurgerBuilder extends Component {
     }
 
     render() {
+
         const disabledInfo = { ...this.state.ingredients }
         let burger = this.state.error ? <h1 style={{ textAlign: 'center' }}>Cannot load ingredients</h1> : <Spinner />
         let orderSummary = null

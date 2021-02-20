@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom';
 import Logo from '../../Logo/Logo'
 import NavigationItems from '../NavigationItems/NavigationItems';
 import Backdrop from '../../UI/Backdrop/Backdrop';
@@ -15,7 +16,12 @@ const sideDrawer = ( props ) => {
             <Backdrop show={ props.open } clicked={ props.closed }/>
             <div className={ attachedClasses.join( ' ' ) }>
                 {/* <Logo height="11%" /> */}
-                <div className={ classes.Logo }>
+                <div 
+                    className={ classes.Logo }
+                    onClick={ () => {
+                        props.closed()
+                        props.history.push('/')
+                    } }>
                     <Logo />
                 </div>
                 <nav>
@@ -26,4 +32,4 @@ const sideDrawer = ( props ) => {
     )
 }
 
-export default sideDrawer
+export default withRouter( sideDrawer )
