@@ -10,9 +10,9 @@
     font-weight: bold;
 }
 
-.Button:first-of-type {
-    /* margin-left: 0;
-    padding-left: 0; */
+.Button:disabled {
+    color: rgb(167, 167, 167);
+    cursor: not-allowed;
 }
 
 .Success {

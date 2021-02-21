@@ -1,5 +1,7 @@
 .ContactData {
     width: 80%;
+    padding: 16px;
+    box-sizing: border-box;
     margin: 0 auto 200px;
     display: flex;
     flex-direction: column;
@@ -8,9 +10,9 @@
     border: 1px solid #ccc;
 }
 
-.ContactData input {
-    display: block;
-    margin: 16px;
+.ContactData form {
+    width: 100%;
+    text-align: center;
 }
 
 @media screen and (min-width: 600px) {
