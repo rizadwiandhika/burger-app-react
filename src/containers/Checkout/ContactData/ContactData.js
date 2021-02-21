@@ -156,7 +156,7 @@ class ContactData extends Component {
         }
 
         const order = {
-            orderDara : fields,
+            orderData : fields,
             ingredients : this.props.ingredients,
             price : this.props.price
         }

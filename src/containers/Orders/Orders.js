@@ -42,10 +42,16 @@ class Orders extends Component {
         if ( ! this.state.loading ) {
             if ( this.state.orders.length > 0 ) {
                 orders = this.state.orders.map( order => (
-                    <Order key={ order.id } ingredients={ order.ingredients } price={ order.price } />
+                    <Order 
+                        key={ order.id }
+                        customerData={ order.orderData }
+                        ingredients={ order.ingredients } 
+                        price={ order.price.toFixed( 2 ) } />
                 ) )
             } else {
-                orders = <h1 style={{ textAlign : 'center' }}>There's no order yet..</h1>
+                orders = <h2 style={{ textAlign : 'center', marginTop : '15vh' }}>
+                            There's no order yet..
+                        </h2>
             }
         }
 
