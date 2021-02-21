@@ -9,38 +9,37 @@ class ContactData extends Component {
 
     state = {
         orderForm : {
-            name : this.setInput('input', '', false,
+            name : this.setInput('input', '',
                         { type : 'text', placeholder : 'Enter your name' }, 
-                        { shouldBeChecked : true, required : true, alphabetOnly : true },
+                        { required : true, alphabetOnly : true },
                         'Please input correct name'),
 
-            street : this.setInput('input', '', false,
+            street : this.setInput('input', '',
                         { type : 'text', placeholder : 'Street' }, 
-                        { shouldBeChecked : true, required : true, }),
+                        { required : true, }),
 
-            zipCode : this.setInput('input', '', false,
+            zipCode : this.setInput('input', '',
                         { type : 'text', placeholder : 'Postal code' }, 
-                        { shouldBeChecked : true, required : true, minLength : 5, maxLength : 5 },
+                        { required : true, minLength : 5, maxLength : 5 },
                         'Postal code should be 5 characters'),
 
-            country : this.setInput('input', '', false,
+            country : this.setInput('input', '',
                         { type : 'text', placeholder : 'Country' }, 
-                        { shouldBeChecked : true, required : true, }),
+                        { required : true, }),
 
-            email : this.setInput('input', '', false,
+            email : this.setInput('input', '',
                         { type : 'email', placeholder : 'email@example.com' },
-                        { shouldBeChecked : true, required : true, emailFormat : true },
+                        { required : true, emailFormat : true },
                         'Email is invalid'),
 
-            deliveryMethod : this.setInput('select', 'fastest', false,
+            deliveryMethod : this.setInput('select', 'fastest',
                                 { options : [
                                         {value : 'fastest', displayValue : 'Fastest' },
                                         {value : 'cheapest', displayValue : 'Cheapest' }
                                     ]
-                                },
-                                { shouldBeChecked : false })
+                                })
         },
-        formIsValid : false,
+        isFormValid : false,
         loading : false
     }
 
@@ -48,33 +47,17 @@ class ContactData extends Component {
      * salah satunya "formik".
      * Di React gak ada built-in form vaildation seperti library Vue, Angular, dll.
     */
-    setInput(elementType='input', value='', touched=false,
-                config={}, 
-                validation={shouldBeChecked : false},
-                invalidMessage='Input is not valid' ) {
-
-        let minReqValidation = {}
-
-        if ( validation.shouldBeChecked ) {
-            minReqValidation = {
-                ...validation,
-                status : false
-            }
-        } else {
-            touched = true
-            minReqValidation = {
-                shouldBeChecked : false,
-                status : true
-            }
-        }
+    setInput(elementType = 'input', initValue = 'default', elementConfig = null, 
+            validation = null, invalidMessage = 'Input is not valid') {
 
         return {
             elementType : elementType,
-            value : value,
-            touched : touched,
-            elementConfig : config,
-            validation : minReqValidation,
-            invalidMessage : invalidMessage
+            value : initValue,
+            elementConfig : elementConfig,
+            validation : validation,
+            valid : validation ? false : true,
+            invalidMessage : invalidMessage,
+            touched : false,
         }
     }
 
@@ -83,7 +66,7 @@ class ContactData extends Component {
     * Di React gak ada built-in form vaildation seperti library Vue, Angular, dll.
     */
     checkValidity(value, rules) {
-        if ( ! rules.shouldBeChecked ) {
+        if ( ! rules ) {
             return true
         }
 
@@ -130,26 +113,26 @@ class ContactData extends Component {
         return false
     }
 
-    formChangeHandler = (key, event) => {
+   
+
+    formChangeHandler = (selectedFieldKey, event) => {
         this.setState( prevState => {
-            const newOrderForm = {...prevState.orderForm}
-            const newSelectedInput = {...newOrderForm[key]}
+            const updatedForm = {...prevState.orderForm}
+            const selectedField = {...updatedForm[selectedFieldKey]}
             
-            newSelectedInput.touched = true
-            newSelectedInput.value = event.target.value
-            newSelectedInput.validation.status = this.checkValidity( 
-                                                    newSelectedInput.value, newSelectedInput.validation )
+            selectedField.touched = true
+            selectedField.value = event.target.value
+            selectedField.valid = this.checkValidity( 
+                                    selectedField.value, selectedField.validation )
             // 
-            newOrderForm[key] = newSelectedInput
+            updatedForm[selectedFieldKey] = selectedField
             
             let formValid = true
-            for( const formField in newOrderForm ) {
-                formValid = newOrderForm[formField].validation.status && formValid
+            for( const fieldKey in updatedForm ) {
+                formValid = updatedForm[fieldKey].valid && formValid
             }
 
-            // newOrderForm[key] = this.setInput( elType, event.target.value, elConfig )
-
-            return { orderForm : newOrderForm, formIsValid : formValid }
+            return { orderForm : updatedForm, isFormValid : formValid }
         } )
     }
 
@@ -166,14 +149,14 @@ class ContactData extends Component {
          * because we probably have our product stored in server 
          * AND MAKE SURE USER ISN'T MANIPULATING THE CODE
         */
-        const formData = {}
+        const fields = {}
 
-        for ( const information in this.state.orderForm ) {
-            formData[information] = this.state.orderForm[information].value
+        for ( const fieldKey in this.state.orderForm ) {
+            fields[fieldKey] = this.state.orderForm[fieldKey].value
         }
 
         const order = {
-            orderDara : formData,
+            orderDara : fields,
             ingredients : this.props.ingredients,
             price : this.props.price
         }
@@ -193,25 +176,31 @@ class ContactData extends Component {
             } )
     }
 
-    cancelHandler = (event) => {
-        event.preventDefault()
-    }
+    /* {
+        elementType : elementType,
+        value : initValue,
+        elementConfig : elementConfig,
+        validation : validation,
+        valid : validation ? true : false,
+        invalidMessage : invalidMessage,
+        touched : false,
+    } */
 
     render() {
         let inputs = []
 
-        for ( const key in this.state.orderForm ) {
+        for ( const fieldKey in this.state.orderForm ) {
 
-            const input = this.state.orderForm[key]
+            const field = this.state.orderForm[fieldKey]
             const formated = <Input  
-                                key={ key }
-                                inpKey={ key }
-                                elementType={ input.elementType } 
-                                elementConfig={ input.elementConfig }
-                                value={ input.value }
-                                touched={ input.touched }
-                                invalid={ ! input.validation.status }
-                                invalidMessage={ input.invalidMessage }
+                                key={ fieldKey }
+                                fieldKey={ fieldKey }
+                                elementType={ field.elementType } 
+                                elementConfig={ field.elementConfig }
+                                value={ field.value }
+                                touched={ field.touched }
+                                invalid={ ! field.valid }
+                                invalidMessage={ field.invalidMessage }
                                 changed={ this.formChangeHandler } />
 
             inputs.push( formated )
@@ -221,7 +210,7 @@ class ContactData extends Component {
             <form>
                 { inputs }
                 <Button 
-                    disabled={ ! this.state.formIsValid } 
+                    disabled={ ! this.state.isFormValid } 
                     btnType="Success" 
                     clicked={ this.orderHandler.bind( this ) }>
                     Order Now

@@ -24,7 +24,7 @@ const input = ( props ) => {
                         className={ inputElementClasses.join(' ') } 
                         value={ props.value }
                         onChange={ event => { 
-                            props.changed( props.inpKey, event ) 
+                            props.changed( props.fieldKey, event ) 
                         } }
                         />
             )
@@ -38,7 +38,7 @@ const input = ( props ) => {
                 <select 
                     className={ inputElementClasses.join(' ') }
                     value={ props.value }
-                    onChange={ event => { props.changed( props.inpKey, event ) } }>
+                    onChange={ event => { props.changed( props.fieldKey, event ) } }>
                     { options }
                 </select>
             )

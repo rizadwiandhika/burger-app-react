@@ -40,9 +40,13 @@ class Orders extends Component {
         let orders = <Spinner />
 
         if ( ! this.state.loading ) {
-            orders = this.state.orders.map( order => (
-                <Order key={ order.id } ingredients={ order.ingredients } price={ order.price } />
-            ) )
+            if ( this.state.orders.length > 0 ) {
+                orders = this.state.orders.map( order => (
+                    <Order key={ order.id } ingredients={ order.ingredients } price={ order.price } />
+                ) )
+            } else {
+                orders = <h1 style={{ textAlign : 'center' }}>There's no order yet..</h1>
+            }
         }
 
         if ( this.state.error ) {
