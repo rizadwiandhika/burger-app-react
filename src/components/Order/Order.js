@@ -21,7 +21,7 @@ const order = ({ customerData, price, ingredients }) => {
 
     return (
         <div className={ classes.Order }>
-            <h4>{ /* customerData.name */ }</h4>
+            <h4>{ customerData.name }</h4>
             <p>Ingredients : { ingredientList } </p>  
             <p style={{ textAlign: 'center', marginTop: '1.5em' }}>Price : <strong>${price}</strong></p>  
         </div>
