@@ -4,14 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { createStore ,combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 
-import burgerReducer from './store/reducers/burger'
+import reducer from './store/reducers/reducer'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import './index.css'
 
+/* Memisah-misah itu dilakuin kalo state kita ada banyak banget aja
 const rootReducer = combineReducers({
   burger: burgerReducer
-})
+}) */
+const rootReducer = reducer 
 
 const store = createStore( rootReducer )
 

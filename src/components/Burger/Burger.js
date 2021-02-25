@@ -43,4 +43,4 @@ const burger = ( props ) => {
  * Bukan bener-bener dicek value objectnya.
  * Terbukti dari ini dan juga pada Cockpit.js (yang tadinya dipassingkan persons bukan persons.length)
 */
-export default React.memo( burger )
+export default burger

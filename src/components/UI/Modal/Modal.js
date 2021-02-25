@@ -6,10 +6,6 @@ import classes from './Modal.module.css'
 
 const modal = ( props ) => {
 
-    // UseEffect(() => {
-    //     console.log( '[Modal.js] Updated' )
-    // })
- 
     return (
         <>
             <Backdrop show={ props.show } clicked={ props.modalClosed } />
