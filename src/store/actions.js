@@ -1,7 +1,0 @@
-const actions = {
-    RESET_BURGER: 'SET_INGREDIENTS',
-    ADD_INGREDIENT: 'ADD_INGREDIENT',
-    REMOVE_INGREDIENT: 'REMOVE_INGREDIENT',
-}
-
-export { actions }
